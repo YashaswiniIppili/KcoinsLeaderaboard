@@ -49,7 +49,7 @@ def add_serial_numbers(df):
     return df_sorted
 
 def main():
-    st.title('Product Hunt K Coins Leaderboard')
+    st.title('Product Hunt K-Coins Leaderboard')
     st.header('11 Days Left :)')
 
     profile_dict = {
