@@ -57,7 +57,7 @@ def calculate_days_left(target_date):
 def main():
     st.title('Product Hunt K-Coins Leaderboard')
     
-    target_date = datetime(2024, 8, 13) 
+    target_date = datetime(2024, 8, 12) 
     days_left = calculate_days_left(target_date)
     st.header(f'{days_left} Days To Go : )')
 
