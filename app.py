@@ -39,18 +39,18 @@ def scrape_profiles(profile_dict):
             except Exception as e:
                 logging.error(f"Error scraping {url}: {e}")
         combined_urls_str = ', '.join(combined_urls)
-        data.append({'Name': name, 'Profile URLs': combined_urls_str, 'K Coins': total_coins})
+        data.append({'Name': name, 'Profiles': len(combined_urls), 'K Coins': total_coins})
     df = pd.DataFrame(data)
     return df
 
 def add_serial_numbers(df):
     df_sorted = df.sort_values(by='K Coins', ascending=False).reset_index(drop=True)
-    df_sorted['Serial Number'] = df_sorted.index + 1
+    df_sorted['Rank'] = df_sorted.index + 1
     return df_sorted
 
 def main():
     st.title('Product Hunt K-Coins Leaderboard')
-    st.header('11 Days To Go :)')
+    st.header('11 Days To Go : )')
 
     profile_dict = {
         'Yashaswini Ippili': [
@@ -178,7 +178,7 @@ def main():
         st.write("No data available")
     else:
         df = add_serial_numbers(df)
-        st.dataframe(df[['Serial Number', 'Name', 'Profile URLs', 'K Coins']], hide_index=True)
+        st.dataframe(df[['Rank', 'Name', 'Profiles', 'K Coins']], hide_index=True, use_container_width=800)
 
 if __name__ == '__main__':
     main()
