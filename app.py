@@ -50,7 +50,7 @@ def add_serial_numbers(df):
 
 def main():
     st.title('Product Hunt K-Coins Leaderboard')
-    st.header('11 Days Left :)')
+    st.header('11 Days To Go :)')
 
     profile_dict = {
         'Yashaswini Ippili': [
