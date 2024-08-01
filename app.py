@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import logging
+from datetime import datetime, timedelta
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -44,13 +45,21 @@ def scrape_profiles(profile_dict):
     return df
 
 def add_serial_numbers(df):
-    df_sorted = df.sort_values(by='K Coins', ascending=False).reset_index(drop=True)
+    df_sorted = df.sort_values(by=['K Coins', 'Profiles'], ascending=[False, False]).reset_index(drop=True)
     df_sorted['Rank'] = df_sorted.index + 1
     return df_sorted
 
+def calculate_days_left(target_date):
+    today = datetime.now()
+    remaining_days = (target_date - today).days
+    return remaining_days
+
 def main():
     st.title('Product Hunt K-Coins Leaderboard')
-    st.header('11 Days To Go : )')
+    
+    target_date = datetime(2024, 8, 13) 
+    days_left = calculate_days_left(target_date)
+    st.header(f'{days_left} Days To Go : )')
 
     profile_dict = {
         'Yashaswini Ippili': [
@@ -70,7 +79,9 @@ def main():
             'https://www.producthunt.com/@hari_krishnan38'
         ],
         'Kumar' : [
-            'https://www.producthunt.com/@kumrr'
+            'https://www.producthunt.com/@kumrr',
+            'https://www.producthunt.com/@lakshmi_shantharam',
+            'https://www.producthunt.com/@rangarajan_krishnamoorthy',
         ],
         'Nikitha' : [
             'https://www.producthunt.com/@nikitha_j_prabhu',
@@ -126,6 +137,9 @@ def main():
         ],
         'Phani' : [
             'https://www.producthunt.com/@phani_slang',
+            'https://www.producthunt.com/@sathyavathi_raghavendra',
+            'https://www.producthunt.com/@raghav_radhakrishna',
+            'https://www.producthunt.com/@phaniraj_raghavendra'
         ],
         'Jayaram Mahale' : [
             'https://www.producthunt.com/@jayaram_mahale',
