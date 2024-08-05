@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -29,23 +29,26 @@ def scrape_profile(url):
 def scrape_profiles(profile_dict):
     data = []
     for name, urls in profile_dict.items():
-        total_coins = 0
+        max_coins = 0
         combined_urls = []
+        max_url = None
         for url in urls:
+            combined_urls.append(url)
             try:
                 coins = scrape_profile(url)
-                total_coins += coins
-                combined_urls.append(url)
+                if coins > max_coins:
+                    max_coins = coins
+                    max_url = url
                 time.sleep(1)  
             except Exception as e:
                 logging.error(f"Error scraping {url}: {e}")
-        combined_urls_str = ', '.join(combined_urls)
-        data.append({'Name': name, 'Profiles': len(combined_urls), 'K Coins': total_coins})
+        data.append({'Name': name, 'Profile': len(combined_urls), 'K Coins': max_coins})
     df = pd.DataFrame(data)
     return df
 
+
 def add_serial_numbers(df):
-    df_sorted = df.sort_values(by=['K Coins', 'Profiles'], ascending=[False, False]).reset_index(drop=True)
+    df_sorted = df.sort_values(by=['K Coins', 'Profile'], ascending=[False, False]).reset_index(drop=True)
     df_sorted['Rank'] = df_sorted.index + 1
     return df_sorted
 
@@ -174,9 +177,6 @@ def main():
         'Padmaja Bhol' : [
             'https://www.producthunt.com/@padmaja_bhol',
         ],
-        'Adithya' : [
-            'https://www.producthunt.com/@adithya_s4',
-        ],
     }
 
     @st.cache_data(ttl=3600) 
@@ -192,7 +192,7 @@ def main():
         st.write("No data available")
     else:
         df = add_serial_numbers(df)
-        st.dataframe(df[['Rank', 'Name', 'Profiles', 'K Coins']], hide_index=True, use_container_width=800)
+        st.dataframe(df[['Rank', 'Name', 'Profile', 'K Coins']], hide_index=True, use_container_width=800)
 
 if __name__ == '__main__':
     main()
